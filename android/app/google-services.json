@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1090200470236",
+    "project_id": "chat2gether-48972",
+    "storage_bucket": "chat2gether-48972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090200470236:android:df39e96cba9ba1f0e22a19",
+        "android_client_info": {
+          "package_name": "com.example.chattogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090200470236-69l40vallkdu5810f91fechckm0cf0sh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chattogether",
+            "certificate_hash": "0de9168a88ae96fca5fde42f21ca438043cfeea9"
+          }
+        },
+        {
+          "client_id": "1090200470236-1pc72bdu96k99gclo0scj3nu00tjvji3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANcrJkFxsJsyS1gEOVPoUQVBaLfdfPBmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090200470236-1pc72bdu96k99gclo0scj3nu00tjvji3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1090200470236-crvdfa6vppm525ip0vvk66rul0jcoh26.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chattogether.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
