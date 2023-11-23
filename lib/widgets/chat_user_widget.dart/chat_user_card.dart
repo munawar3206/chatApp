@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatUserCard extends StatefulWidget {
@@ -21,16 +23,32 @@ class _ChatUserCardState extends State<ChatUserCard> {
       child: InkWell(
         onTap: () {},
         child: ListTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.redAccent,
-            child: Icon(Icons.person),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              width: mq.height * .055,
+              height: mq.height * .055,
+              imageUrl: widget.User.image,
+              // placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => CircleAvatar(
+                child: Icon(CupertinoIcons.person),
+              ),
+            ),
           ),
           title: Text(widget.User.name),
           subtitle: Text(
             widget.User.about,
             maxLines: 1,
           ),
-          trailing: const Text("12:23 PM"),
+          trailing: Container(
+            width: 15,
+            height: 15,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Color.fromARGB(255, 3, 157, 8),
+            ),
+          ),
+          // trailing: const Text("12:23 PM"),
         ),
       ),
     );

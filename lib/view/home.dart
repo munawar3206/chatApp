@@ -1,7 +1,7 @@
-
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:chattogether/view/profile_screen.dart';
 import 'package:chattogether/widgets/chat_user_widget.dart/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +31,17 @@ class _HomepageState extends State<Homepage> {
         leading: const Icon(CupertinoIcons.home),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        user: list[0],
+                      ),
+                    ));
+              },
+              icon: const Icon(Icons.more_vert))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -53,11 +63,9 @@ class _HomepageState extends State<Homepage> {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-       
+
               case ConnectionState.active:
-            
               case ConnectionState.done:
-               
 
                 // if (snapshot.hasData) {
                 final data = snapshot.data?.docs;

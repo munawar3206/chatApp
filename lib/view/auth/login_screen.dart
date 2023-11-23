@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/view/home.dart';
@@ -18,13 +19,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   _handleGoogleBtnClick() {
-    _signInWithGoogle().then((user) {
+    _signInWithGoogle().then((user) async {
       if (user != null) {
         print('\nUser: ${user.user}');
         print('\nUserAdditionalInfo: ${user.additionalUserInfo}');
-
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => Homepage()));
+        if ((await Apis.userExists())) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (_) => Homepage()));
+        } else {
+          Apis.createUser().then((value) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => Homepage()));
+          });
+        }
       }
     });
   }
