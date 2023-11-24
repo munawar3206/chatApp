@@ -2,7 +2,7 @@ import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/profile_screen.dart';
-import 'package:chattogether/widgets/chat_user_widget.dart/chat_user_card.dart';
+import 'package:chattogether/view/homeScreen/chat_user_widget.dart/chat_user_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

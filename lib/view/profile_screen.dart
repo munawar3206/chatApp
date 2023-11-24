@@ -5,7 +5,7 @@ import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
-import 'package:chattogether/view/auth/login_screen.dart';
+import 'package:chattogether/view/loginscreen/login_screen.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -206,9 +206,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           final ImagePicker picker = ImagePicker();
 // Pick an image.
                           final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery);
+                              source: ImageSource.gallery, imageQuality: 80);
                           if (image != null) {
-                            print("image path : ${image.path}");
+                            print(
+                                "image path : ${image.path} --MimeType:${image.mimeType}");
+                            setState(() {
+                              _image = image.path;
+                            });
+                            Apis.updateProfilePicture(File(_image!));
                           }
                           Navigator.pop(context);
                         },
@@ -227,30 +232,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                     ],
                   ),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            elevation: 20,
-                            backgroundColor: Colors.white,
-                            fixedSize: Size(mq.width * .3, mq.height * .14)),
-                        onPressed: () {},
-                        child: Image.asset(
-                          "assets/camera.png",
+                  // Column(
+                  //   children: [
+                  //     ElevatedButton(
+                  //       style: ElevatedButton.styleFrom(
+                  //           shape: CircleBorder(),
+                  //           elevation: 20,
+                  //           backgroundColor: Colors.white,
+                  //           fixedSize: Size(mq.width * .3, mq.height * .14)),
+                  //       onPressed: () {},
+                  //       child: Image.asset(
+                  //         "assets/camera.png",
 
-                          // height: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Camera",
-                        style: TextStyle(fontWeight: FontWeight.w800),
-                      )
-                    ],
-                  ),
+                  //         // height: 20,
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 10,
+                  //     ),
+                  //     Text(
+                  //       "Camera",
+                  //       style: TextStyle(fontWeight: FontWeight.w800),
+                  //     )
+                  //   ],
+                  // ),
                 ],
               ),
               SizedBox(

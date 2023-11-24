@@ -1,5 +1,5 @@
 import 'package:chattogether/firebase_options.dart';
-import 'package:chattogether/view/auth/login_screen.dart';
+import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

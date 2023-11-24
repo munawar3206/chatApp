@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:chattogether/view/chatscreen/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,14 @@ class _ChatUserCardState extends State<ChatUserCard> {
               color: Color.fromARGB(255, 3, 157, 8),
             ),
           ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                          user: widget.User,
+                        )));
+          },
           // trailing: const Text("12:23 PM"),
         ),
       ),
