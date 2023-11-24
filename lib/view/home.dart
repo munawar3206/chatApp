@@ -18,6 +18,12 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<ChatUser> list = [];
   @override
+  void initState() {
+    Apis.getSelfInfo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +43,7 @@ class _HomepageState extends State<Homepage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfileScreen(
-                        user: list[0],
+                        user:Apis.me,
                       ),
                     ));
               },
@@ -55,7 +61,7 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
       body: StreamBuilder(
-          stream: Apis.firestore.collection('users').snapshots(),
+          stream: Apis.getAllUsers(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

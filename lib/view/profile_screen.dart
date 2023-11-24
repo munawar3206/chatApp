@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:chattogether/view/auth/login_screen.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ChatUser user;
@@ -17,87 +21,243 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String? _image;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Profile Screen",
-          style: TextStyle(fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Profile Screen",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          elevation: 4,
+          backgroundColor: Colors.black,
         ),
-        centerTitle: true,
-        elevation: 4,
-        backgroundColor: Colors.black,
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: FloatingActionButton.extended(
-          label: Text("signout"),
-          backgroundColor: const Color.fromARGB(255, 245, 9, 9),
-          onPressed: () async {
-            await Apis.auth.signOut();
-            await GoogleSignIn().signOut();
-          },
-          icon: Icon(
-            Icons.logout_outlined,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: FloatingActionButton.extended(
+            label: Text("Logout"),
+            backgroundColor: const Color.fromARGB(255, 245, 9, 9),
+            onPressed: () async {
+              // progress dialog
+              Dialogs.showProgressBar(context);
+              // signout
+              await Apis.auth.signOut().then((value) async {
+                await GoogleSignIn().signOut().then((value) => {
+                      // hidding progress bar
+                      Navigator.pop(context),
+                      Navigator.pop(context),
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ))
+                    });
+              });
+            },
+            icon: Icon(
+              Icons.logout_outlined,
+            ),
+          ),
+        ),
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: mq.width * .05),
+            child: SingleChildScrollView(
+              child: Column(children: [
+                SizedBox(
+                  width: mq.width,
+                  height: mq.height * .1,
+                ),
+                Stack(
+                  children: [
+                    _image != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .1),
+                            child: Image.file(
+                              File(_image!),
+                              width: mq.height * .2,
+                              height: mq.height * .2,
+                              // imageUrl: widget.user.image,
+                              fit: BoxFit.fill,
+                              // placeholder: (context, url) => CircularProgressIndicator(),
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .1),
+                            child: CachedNetworkImage(
+                              width: mq.height * .2,
+                              height: mq.height * .2,
+                              imageUrl: widget.user.image,
+                              fit: BoxFit.fill,
+                              // placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const CircleAvatar(
+                                child: Icon(CupertinoIcons.person),
+                              ),
+                            ),
+                          ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: MaterialButton(
+                        shape: CircleBorder(),
+                        onPressed: () {
+                          _showbottomsheet();
+                        },
+                        color: Colors.white,
+                        child: Icon(Icons.edit),
+                        elevation: 1,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: mq.height * .03,
+                ),
+                Text(widget.user.email),
+                SizedBox(
+                  height: mq.height * .03,
+                ),
+                TextFormField(
+                  initialValue: widget.user.name,
+                  onSaved: (val) => Apis.me.name = val ?? "",
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : "Required Field",
+                  decoration: InputDecoration(
+                    hintText: "eg. Avarankutty",
+                    label: const Text("Name"),
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+                SizedBox(
+                  height: mq.height * .03,
+                ),
+                TextFormField(
+                  initialValue: widget.user.about,
+                  onSaved: (val) => Apis.me.about = val ?? "",
+                  validator: (val) =>
+                      val != null && val.isNotEmpty ? null : "Required Field",
+                  decoration: InputDecoration(
+                      hintText: "eg. ntha barthanam",
+                      label: const Text("About"),
+                      prefixIcon: const Icon(Icons.info_outline),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      Apis.updateUserInfo()
+                          .then((value) => Dialogs.showSnackbar(context));
+                      print("valid");
+                    }
+                  },
+                  icon: Icon(Icons.edit),
+                  label: Text("UPDATE"),
+                )
+              ]),
+            ),
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: mq.width * .05),
-        child: SingleChildScrollView(
-          child: Column(children: [
-            SizedBox(
-              width: mq.width,
-              height: mq.height * .1,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(mq.height * .1),
-              child: CachedNetworkImage(
-                width: mq.height * .2,
-                height: mq.height * .2,
-                imageUrl: widget.user.image,
-                fit: BoxFit.fill,
-                // placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const CircleAvatar(
-                  child: Icon(CupertinoIcons.person),
+    );
+  }
+
+  void _showbottomsheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  "Pick Image From",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                 ),
               ),
-            ),
-            SizedBox(
-              height: mq.height * .03,
-            ),
-            Text(widget.user.email),
-            SizedBox(
-              height: mq.height * .03,
-            ),
-            TextFormField(
-              initialValue: widget.user.name,
-              decoration: InputDecoration(
-                hintText: "eg. Avarankutty",
-                label: const Text("Name"),
-                prefixIcon: const Icon(Icons.person),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            elevation: 20,
+                            backgroundColor: Colors.white,
+                            fixedSize: Size(mq.width * .3, mq.height * .14)),
+                        onPressed: () async {
+                          final ImagePicker picker = ImagePicker();
+// Pick an image.
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (image != null) {
+                            print("image path : ${image.path}");
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Image.asset(
+                          "assets/picture.png",
+
+                          // height: 20,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Gallery",
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            elevation: 20,
+                            backgroundColor: Colors.white,
+                            fixedSize: Size(mq.width * .3, mq.height * .14)),
+                        onPressed: () {},
+                        child: Image.asset(
+                          "assets/camera.png",
+
+                          // height: 20,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Camera",
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      )
+                    ],
+                  ),
+                ],
               ),
-            ),
-            SizedBox(
-              height: mq.height * .03,
-            ),
-            TextFormField(
-              initialValue: widget.user.about,
-              decoration: InputDecoration(
-                  hintText: "eg. ntha barthanam",
-                  label: const Text("About"),
-                  prefixIcon: const Icon(Icons.info_outline),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20))),
-            ),
-            ElevatedButton.icon(
-                onPressed: () {}, icon: Icon(Icons.edit), label: Text("UPDATE"),)
-          ]),
-        ),
-      ),
-    );
+              SizedBox(
+                height: 10,
+              )
+            ],
+          );
+        });
   }
 }
