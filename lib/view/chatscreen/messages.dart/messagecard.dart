@@ -17,14 +17,10 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-  
-    
     return Apis.user.uid == widget.message.fromId
-        ? GreenMessage(widget: widget)
-        : BlueMessage(
+        ? BlueMessage(widget: widget)
+        : GreenMessage(
             widget: widget,
-            
           );
   }
-  
 }

@@ -1,3 +1,5 @@
+import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,10 @@ class GreenMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.message.read.isNotEmpty) {
+      Apis.updateMessageReadStatus(widget.message);
+      print("Message Updated");
+    }
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -31,16 +37,18 @@ class GreenMessage extends StatelessWidget {
           ),
         ),
         Text(
-          widget.message.read + '12:00',
+          MyDateUtil.getFrommattedTime(
+              context: context, time: widget.message.sent),
           style: TextStyle(fontSize: 13, color: Colors.black54),
         ),
         SizedBox(
           width: 5,
         ),
-        Icon(
-          Icons.done_all_rounded,
-          color: Colors.blue,
-        ),
+        if (widget.message.read.isNotEmpty)
+          Icon(
+            Icons.done_all_rounded,
+            color: Colors.blue,
+          ),
 
         // SizedBox(
         //   width: mq.width * .04,

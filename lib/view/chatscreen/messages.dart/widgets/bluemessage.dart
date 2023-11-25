@@ -1,3 +1,4 @@
+import 'package:chattogether/helpers/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
@@ -16,15 +17,17 @@ class BlueMessage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Icon(
-          Icons.done_all_rounded,
-          color: Colors.blue,
-        ),
+        if (widget.message.read.isNotEmpty)
+          Icon(
+            Icons.done_all_rounded,
+            color: Colors.blue,
+          ),
         SizedBox(
           width: 5,
         ),
         Text(
-          widget.message.read + "12:00",
+          MyDateUtil.getFrommattedTime(
+              context: context, time: widget.message.sent),
           style: TextStyle(fontSize: 13, color: Colors.black54),
         ),
         Flexible(

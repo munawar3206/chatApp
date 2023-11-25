@@ -10,6 +10,7 @@ import 'package:chattogether/view/homeScreen/chat_user_widget.dart/chat_user_car
 import 'package:chattogether/view/chatscreen/widgets/chatscreenappbar/appbar.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
 import 'package:chattogether/view/chatscreen/widgets/chatscreenappbar/textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,9 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   // store massages
   List<MessageModel> _list = [];
+
+  // for handling msg text changes
+  // final TextEditingController _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,43 +42,30 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                  stream: Apis.getAllMessage(),
+                  stream: Apis.getAllMessage(widget.user),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
                       case ConnectionState.waiting:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return SizedBox();
 
                       case ConnectionState.active:
                       case ConnectionState.done:
-                        final data = snapshot.data?.docs;
-                        print('Data:${jsonEncode(data![0].data())}');
-                        // if (snapshot.hasData) {
                         // final data = snapshot.data?.docs;
-                        // list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                        //     [];
+                        // print('Data:${jsonEncode(data![0].data())}');
+                        // if (snapshot.hasData) {
+                        final data = snapshot.data?.docs;
+
+                        _list = data
+                                ?.map((e) => MessageModel.fromJson(e.data()))
+                                .toList() ??
+                            [];
                         // for (var i in data!) {
                         //   print('Data : ${jsonEncode(i.data())}');
                         //   list.add(i.data()['name']);
                         // }
                         // }
-                        _list.clear();
-                        _list.add(MessageModel(
-                            msg: "Hello",
-                            toId: Apis.user.uid,
-                            read: "",
-                            type: Type.text,
-                            fromId: "",
-                            sent: "12:52Am"));
-                        _list.add(MessageModel(
-                            msg: "Hlo",
-                            toId: "143",
-                            read: "",
-                            type: Type.text,
-                            fromId: Apis.user.uid,
-                            sent: "12:42Pm"));
+
                         if (_list.isNotEmpty) {
                           return ListView.builder(
                               itemCount: _list.length,
@@ -95,7 +86,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
                   }),
             ),
-            Customtextfield(),
+            Customtextfield(
+              user: widget.user,
+            ),
           ],
         ),
       ),
