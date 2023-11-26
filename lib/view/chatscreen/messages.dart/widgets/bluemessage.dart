@@ -1,3 +1,4 @@
+import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chattogether/main.dart';
@@ -14,10 +15,14 @@ class BlueMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.message.read.isEmpty) {
+      Apis.updateMessageReadStatus(widget.message);
+      print("Message Updated");
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (widget.message.read.isNotEmpty)
+        if (widget.message.read.isEmpty)
           Icon(
             Icons.done_all_rounded,
             color: Colors.blue,
@@ -32,7 +37,7 @@ class BlueMessage extends StatelessWidget {
         ),
         Flexible(
           child: Container(
-            padding: EdgeInsets.all(mq.width * .04),
+            padding: EdgeInsets.all(mq.width * .03),
             margin: EdgeInsets.symmetric(
                 vertical: mq.width * .04, horizontal: mq.height * .01),
             decoration: BoxDecoration(

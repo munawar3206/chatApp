@@ -14,10 +14,7 @@ class GreenMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.message.read.isNotEmpty) {
-      Apis.updateMessageReadStatus(widget.message);
-      print("Message Updated");
-    }
+  
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

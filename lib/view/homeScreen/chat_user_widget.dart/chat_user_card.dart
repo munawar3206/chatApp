@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/main.dart';
+import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/chatscreen/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +16,8 @@ class ChatUserCard extends StatefulWidget {
 }
 
 class _ChatUserCardState extends State<ChatUserCard> {
+  // last msg info (if null ---no msg)
+  MessageModel? _messageModel;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -22,33 +26,6 @@ class _ChatUserCardState extends State<ChatUserCard> {
       elevation: 0.5,
       shape: const RoundedRectangleBorder(),
       child: InkWell(
-        onTap: () {},
-        child: ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              width: mq.height * .055,
-              height: mq.height * .055,
-              imageUrl: widget.User.image,
-              // placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => CircleAvatar(
-                child: Icon(CupertinoIcons.person),
-              ),
-            ),
-          ),
-          title: Text(widget.User.name),
-          subtitle: Text(
-            widget.User.about,
-            maxLines: 1,
-          ),
-          trailing: Container(
-            width: 15,
-            height: 15,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Color.fromARGB(255, 3, 157, 8),
-            ),
-          ),
           onTap: () {
             Navigator.push(
                 context,
@@ -57,9 +34,58 @@ class _ChatUserCardState extends State<ChatUserCard> {
                           user: widget.User,
                         )));
           },
-          // trailing: const Text("12:23 PM"),
-        ),
-      ),
+          child: StreamBuilder(
+              stream: Apis.getLastMessage(widget.User),
+              builder: (context, snapshot) {
+                final data = snapshot.data?.docs;
+                final list = data
+                        ?.map((e) => MessageModel.fromJson(e.data()))
+                        .toList() ??
+                    [];
+                if (list.isNotEmpty) _messageModel = list[0];
+
+                // if (data != null && data.first.exists) {
+                //   _messageModel = MessageModel.fromJson(data.first.data());
+                // }
+
+                return ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        width: mq.height * .055,
+                        height: mq.height * .055,
+                        imageUrl: widget.User.image,
+                        // placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => CircleAvatar(
+                          child: Icon(CupertinoIcons.person),
+                        ),
+                      ),
+                    ),
+                    title: Text(widget.User.name),
+                    subtitle: Text(
+                      _messageModel != null
+                          ? _messageModel!.msg
+                          : widget.User.about,
+                      maxLines: 1,
+                    ),
+                    trailing: _messageModel == null
+                        // show nothing when no msg is sent
+                        ? null
+                        // : _messageModel!.read.isEmpty &&
+                        //         _messageModel!.fromId != Apis.user.uid
+                        // show unread msg
+                        : Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Color.fromARGB(255, 3, 157, 8),
+                            ),
+                          )
+                    // : Text(_messageModel!.sent),
+                    );
+              })),
     );
   }
 }
+
