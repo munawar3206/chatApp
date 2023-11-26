@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
@@ -49,43 +50,44 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 // }
 
                 return ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        width: mq.height * .055,
-                        height: mq.height * .055,
-                        imageUrl: widget.User.image,
-                        // placeholder: (context, url) => CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => CircleAvatar(
-                          child: Icon(CupertinoIcons.person),
-                        ),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      width: mq.height * .055,
+                      height: mq.height * .055,
+                      imageUrl: widget.User.image,
+                      // placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => CircleAvatar(
+                        child: Icon(CupertinoIcons.person),
                       ),
                     ),
-                    title: Text(widget.User.name),
-                    subtitle: Text(
-                      _messageModel != null
-                          ? _messageModel!.msg
-                          : widget.User.about,
-                      maxLines: 1,
-                    ),
-                    trailing: _messageModel == null
-                        // show nothing when no msg is sent
-                        ? null
-                        // : _messageModel!.read.isEmpty &&
-                        //         _messageModel!.fromId != Apis.user.uid
-                        // show unread msg
-                        : Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Color.fromARGB(255, 3, 157, 8),
-                            ),
-                          )
-                    // : Text(_messageModel!.sent),
-                    );
+                  ),
+                  title: Text(widget.User.name),
+                  subtitle: Text(
+                    _messageModel != null
+                        ? _messageModel!.msg
+                        : widget.User.about,
+                    maxLines: 1,
+                  ),
+                  trailing: _messageModel == null
+                      // show nothing when no msg is sent
+                      ? null
+                      : _messageModel!.read.isEmpty &&
+                              _messageModel!.fromId != Apis.user.uid
+                          // show unread msg
+                          ? Container(
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Color.fromARGB(255, 3, 157, 8),
+                              ),
+                            )
+                          : Text(MyDateUtil.getLastMessageTime(
+                              context: context, time: _messageModel!.sent)),
+                );
               })),
     );
   }
+// 42
 }
-
