@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -41,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: FloatingActionButton.extended(
-            label: Text("Logout"),
+            label: const Text("Logout"),
             backgroundColor: const Color.fromARGB(255, 245, 9, 9),
             onPressed: () async {
               // progress dialog
@@ -55,12 +53,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
+                            builder: (context) => const LoginScreen(),
                           ))
                     });
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout_outlined,
             ),
           ),
@@ -107,13 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       bottom: 0,
                       right: 0,
                       child: MaterialButton(
-                        shape: CircleBorder(),
+                        shape: const CircleBorder(),
                         onPressed: () {
                           _showbottomsheet();
                         },
                         color: Colors.white,
-                        child: Icon(Icons.edit),
                         elevation: 1,
+                        child: const Icon(Icons.edit),
                       ),
                     )
                   ],
@@ -162,8 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       print("valid");
                     }
                   },
-                  icon: Icon(Icons.edit),
-                  label: Text("UPDATE"),
+                  icon: const Icon(Icons.edit),
+                  label: const Text("UPDATE"),
                 )
               ]),
             ),
@@ -176,14 +174,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showbottomsheet() {
     showModalBottomSheet(
         context: context,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         builder: (_) {
           return ListView(
             shrinkWrap: true,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Text(
                   "Pick Image From",
@@ -198,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
+                            shape: const CircleBorder(),
                             elevation: 20,
                             backgroundColor: Colors.white,
                             fixedSize: Size(mq.width * .3, mq.height * .14)),
@@ -223,42 +221,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           // height: 20,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text(
+                      const Text(
                         "Gallery",
                         style: TextStyle(fontWeight: FontWeight.w800),
                       )
                     ],
                   ),
-                  // Column(
-                  //   children: [
-                  //     ElevatedButton(
-                  //       style: ElevatedButton.styleFrom(
-                  //           shape: CircleBorder(),
-                  //           elevation: 20,
-                  //           backgroundColor: Colors.white,
-                  //           fixedSize: Size(mq.width * .3, mq.height * .14)),
-                  //       onPressed: () {},
-                  //       child: Image.asset(
-                  //         "assets/camera.png",
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            elevation: 20,
+                            backgroundColor: Colors.white,
+                            fixedSize: Size(mq.width * .3, mq.height * .14)),
+                        onPressed: () async {
+                          final ImagePicker picker = ImagePicker();
+// Pick an image.
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.camera, imageQuality: 80);
+                          if (image != null) {
+                            print(
+                                "image path : ${image.path} --MimeType:${image.mimeType}");
+                            setState(() {
+                              _image = image.path;
+                            });
+                            Apis.updateProfilePicture(File(_image!));
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Image.asset(
+                          "assets/camera.png",
 
-                  //         // height: 20,
-                  //       ),
-                  //     ),
-                  //     SizedBox(
-                  //       height: 10,
-                  //     ),
-                  //     Text(
-                  //       "Camera",
-                  //       style: TextStyle(fontWeight: FontWeight.w800),
-                  //     )
-                  //   ],
-                  // ),
+                          // height: 20,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                        "Camera",
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      )
+                    ],
+                  ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

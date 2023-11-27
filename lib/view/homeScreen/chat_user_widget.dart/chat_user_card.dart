@@ -5,6 +5,7 @@ import 'package:chattogether/main.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/chatscreen/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -64,11 +65,12 @@ class _ChatUserCardState extends State<ChatUserCard> {
                   ),
                   title: Text(widget.User.name),
                   subtitle: Text(
-                    _messageModel != null
-                        ? _messageModel!.msg
-                        : widget.User.about,
-                    maxLines: 1,
-                  ),
+                      _messageModel != null
+                          ? _messageModel!.type == Type.image
+                              ? 'Image'
+                              : _messageModel!.msg
+                          : widget.User.about,
+                      maxLines: 1),
                   trailing: _messageModel == null
                       // show nothing when no msg is sent
                       ? null

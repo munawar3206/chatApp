@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/date.dart';
+import 'package:chattogether/model/message_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
@@ -23,36 +25,55 @@ class BlueMessage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (widget.message.read.isEmpty)
-          Icon(
+          const Icon(
             Icons.done_all_rounded,
             color: Colors.blue,
           ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Text(
           MyDateUtil.getFrommattedTime(
               context: context, time: widget.message.sent),
-          style: TextStyle(fontSize: 13, color: Colors.black54),
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
         ),
         Flexible(
           child: Container(
-            padding: EdgeInsets.all(mq.width * .03),
+            padding: EdgeInsets.all(widget.message.type == Type.image
+                ? mq.width * .03
+                : mq.width * .04),
             margin: EdgeInsets.symmetric(
-                vertical: mq.width * .04, horizontal: mq.height * .01),
+                horizontal: mq.width * .04, vertical: mq.height * .01),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.lightBlue),
                 color: Colors.blue.shade100,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
                     bottomLeft: Radius.circular(30))),
-            child: Text(widget.message.msg),
+            child: widget.message.type == Type.text
+                ? Text(widget.message.msg)
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: 200,
+                      imageUrl: widget.message.msg,
+                      placeholder: (context, url) => CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        child: Icon(
+                          CupertinoIcons.person,
+                          size: 70,
+                        ),
+                      ),
+                    ),
+                  ),
           ),
         ),
-        // SizedBox(
-        //   width: mq.width * .04,
-        // )
+     
       ],
     );
   }
