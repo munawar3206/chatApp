@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
@@ -57,9 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print('\n _signInWithGoogle: $e');
       // return null;
-      Dialogs.showSnackbar(
-        context,
-      );
+      Dialogs.showSnackbar(context, 'Welcome');
     }
   }
 

@@ -36,6 +36,7 @@ dependencies:
   firebase_storage: ^11.5.2
   flutter:
     sdk: flutter
+  gallery_saver: ^2.3.2
   google_sign_in: ^6.1.6
   image_picker: ^1.0.4
 

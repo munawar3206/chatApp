@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:chattogether/model/message_model.dart';
@@ -151,5 +152,24 @@ class Apis {
     // updating in firebase
     final imageUrl = await ref.getDownloadURL();
     await Apis.sendMessage(chatUser, imageUrl, Type.image);
+  }
+
+  // static Future<void> updateMessage(
+  //     MessageModel message, String updatedMsg) async {
+  //   await firestore
+  //       .collection('chats/${getConversationID(message.toId)}/messages/')
+  //       .doc(message.sent)
+  //       .update({'msg': updatedMsg});
+  // }
+
+  static Future<void> deleteMessage(MessageModel message) async {
+    await firestore
+        .collection('chats/${getConversationID(message.toId)}/messages/')
+        .doc(message.sent)
+        .delete();
+
+    if (message.type == Type.image) {
+      await storage.refFromURL(message.msg).delete();
+    }
   }
 }

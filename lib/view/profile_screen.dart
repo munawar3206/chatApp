@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       Apis.updateUserInfo()
-                          .then((value) => Dialogs.showSnackbar(context));
+                          .then((value) => Dialogs.showSnackbar(context,'Updated'));
                       print("valid");
                     }
                   },

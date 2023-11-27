@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chattogether/apis/api.dart';
+
 import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/message_model.dart';
@@ -64,9 +64,6 @@ class GreenMessage extends StatelessWidget {
             color: Colors.blue,
           ),
 
-        // SizedBox(
-        //   width: mq.width * .04,
-        // )
       ],
     );
   }

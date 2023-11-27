@@ -1,10 +1,13 @@
 import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/helpers/date.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/widgets/bluemessage.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/widgets/greenmessage.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/widgets/option_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MessageCard extends StatefulWidget {
   const MessageCard({super.key, required this.message});
@@ -59,7 +62,16 @@ class _MessageCardState extends State<MessageCard> {
                         size: 26,
                       ),
                       name: 'Copy Text',
-                      onTap: () {})
+                      onTap: () async {
+                        await Clipboard.setData(
+                                ClipboardData(text: widget.message.msg))
+                            .then((value) {
+                          //for hiding bottom sheet
+                          Navigator.pop(context);
+
+                          Dialogs.showSnackbar(context, 'Text Copied!');
+                        });
+                      })
                   : OptionItem(
                       icon: const Icon(
                         Icons.download_done_rounded,
@@ -82,7 +94,10 @@ class _MessageCardState extends State<MessageCard> {
                       size: 26,
                     ),
                     name: 'Edit Message',
-                    onTap: () {}),
+                    onTap: () {
+                      Navigator.pop(context);
+                      // _showMessageUpdateDialog();
+                    }),
               if (isMe)
                 OptionItem(
                     icon: const Icon(
@@ -91,29 +106,29 @@ class _MessageCardState extends State<MessageCard> {
                       size: 26,
                     ),
                     name: 'Delete Message',
-                    onTap: () {}),
+                    onTap: () async {
+                      await Apis.deleteMessage(widget.message).then((value) {
+                        Navigator.pop(context);
+                      });
+                    }),
               Divider(
                 color: Colors.black54,
                 endIndent: mq.width * .04,
                 indent: mq.width * .04,
               ),
               OptionItem(
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Color.fromARGB(255, 255, 251, 0),
-                  ),
-                  name: 'Sent At',
+                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                  name:
+                      'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
                   onTap: () {}),
 
+              //read time
               OptionItem(
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.green,
-                  ),
-                  name: 'Read At',
+                  icon: const Icon(Icons.remove_red_eye, color: Colors.green),
+                  name: widget.message.read.isEmpty
+                      ? 'Read At: Not seen yet'
+                      : 'Read At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.read)}',
                   onTap: () {}),
-
-             
             ],
           );
         });

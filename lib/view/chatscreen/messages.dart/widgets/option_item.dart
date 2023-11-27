@@ -17,7 +17,7 @@ class OptionItem extends StatelessWidget {
         padding: EdgeInsets.only(
             left: mq.width * .05,
             top: mq.height * .015,
-            bottom: mq.height * .015),
+            bottom: mq.height * .0154),
         child: Row(
           children: [
             icon,
