@@ -1,16 +1,11 @@
-import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/main.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
-import 'package:chattogether/view/homeScreen/home.dart';
-import 'package:chattogether/view/homeScreen/chat_user_widget.dart/chat_user_card.dart';
 import 'package:chattogether/view/chatscreen/widgets/chatscreenappbar/appbar.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
 import 'package:chattogether/view/chatscreen/widgets/chatscreenappbar/textfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

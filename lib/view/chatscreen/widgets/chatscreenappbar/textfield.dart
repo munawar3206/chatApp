@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chattogether/apis/api.dart';
-import 'package:chattogether/main.dart';
+
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:flutter/material.dart';

@@ -27,7 +27,7 @@ class GreenMessage extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.green.shade100,
                 border: Border.all(color: Colors.lightGreen),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
                     bottomRight: Radius.circular(30))),
@@ -40,10 +40,10 @@ class GreenMessage extends StatelessWidget {
                       height: 200,
                       width: 200,
                       imageUrl: widget.message.msg,
-                      placeholder: (context, url) => CircularProgressIndicator(
+                      placeholder: (context, url) => const CircularProgressIndicator(
                         strokeWidth: 2,
                       ),
-                      errorWidget: (context, url, error) => CircleAvatar(
+                      errorWidget: (context, url, error) => const CircleAvatar(
                         child: Icon(CupertinoIcons.person),
                       ),
                     ),
@@ -53,13 +53,13 @@ class GreenMessage extends StatelessWidget {
         Text(
           MyDateUtil.getFrommattedTime(
               context: context, time: widget.message.sent),
-          style: TextStyle(fontSize: 13, color: Colors.black54),
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         if (widget.message.read.isNotEmpty)
-          Icon(
+          const Icon(
             Icons.done_all_rounded,
             color: Colors.blue,
           ),
