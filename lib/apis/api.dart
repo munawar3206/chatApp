@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 import 'dart:io';
 
 import 'package:chattogether/model/message_model.dart';
@@ -17,6 +17,9 @@ class Apis {
   static late ChatUser me;
 
   static User get user => auth.currentUser!;
+
+
+
 // user exists or not
   static Future<bool> userExists() async {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
@@ -84,6 +87,11 @@ class Apis {
         .doc(user.uid)
         .update({'image': me.image});
   }
+
+
+
+
+  
 
   ///***************Chat Screen Related Apis/Functions*******************************
   static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
@@ -154,14 +162,7 @@ class Apis {
     await Apis.sendMessage(chatUser, imageUrl, Type.image);
   }
 
-  // static Future<void> updateMessage(
-  //     MessageModel message, String updatedMsg) async {
-  //   await firestore
-  //       .collection('chats/${getConversationID(message.toId)}/messages/')
-  //       .doc(message.sent)
-  //       .update({'msg': updatedMsg});
-  // }
-
+ 
   static Future<void> deleteMessage(MessageModel message) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')

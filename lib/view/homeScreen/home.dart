@@ -1,5 +1,5 @@
 import 'package:chattogether/apis/api.dart';
-import 'package:chattogether/main.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/profile_screen.dart';
 import 'package:chattogether/view/homeScreen/chat_user_widget.dart/chat_user_card.dart';
@@ -73,15 +73,10 @@ class _HomepageState extends State<Homepage> {
               case ConnectionState.active:
               case ConnectionState.done:
 
-                // if (snapshot.hasData) {
                 final data = snapshot.data?.docs;
                 list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
                     [];
-                // for (var i in data!) {
-                //   print('Data : ${jsonEncode(i.data())}');
-                //   list.add(i.data()['name']);
-                // }
-                // }
+         
                 if (list.isNotEmpty) {
                   return ListView.builder(
                       itemCount: list.length,
@@ -91,7 +86,7 @@ class _HomepageState extends State<Homepage> {
                         return ChatUserCard(
                           User: list[index],
                         );
-                        // return Text('Name :${list[index]}');
+                      
                       });
                 } else {
                   return const Center(

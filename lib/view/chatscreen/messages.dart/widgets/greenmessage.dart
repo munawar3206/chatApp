@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:chattogether/helpers/date.dart';
-import 'package:chattogether/main.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
 import 'package:flutter/cupertino.dart';

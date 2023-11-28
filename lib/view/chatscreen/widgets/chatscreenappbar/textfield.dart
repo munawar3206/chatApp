@@ -8,15 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
-class Customtextfield extends StatefulWidget {
+class Customtextfield extends StatelessWidget {
   ChatUser user;
   Customtextfield({super.key, required this.user});
 
-  @override
-  State<Customtextfield> createState() => _CustomtextfieldState();
-}
-
-class _CustomtextfieldState extends State<Customtextfield> {
 //  for handling msg text changes
   final TextEditingController _textController = TextEditingController();
 
@@ -60,7 +55,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
                         // print(
                         //     "image path : ${image.path} --MimeType:${image.mimeType}");
 
-                        Apis.sentChatMessage(widget.user, File(image.path));
+                        Apis.sentChatMessage(user, File(image.path));
                       }
                     },
                     icon: const Icon(
@@ -78,7 +73,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
                           // print(
                           //     "image path : ${image.path} --MimeType:${image.mimeType}");
 
-                          Apis.sentChatMessage(widget.user, File(image.path));
+                          Apis.sentChatMessage(user, File(image.path));
                         }
                       },
                       icon: const Icon(
@@ -93,7 +88,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
             onPressed: () {
               if (_textController.text.isNotEmpty) {
                 print("${_textController.text}");
-                Apis.sendMessage(widget.user, _textController.text,
+                Apis.sendMessage(user, _textController.text,
                     Type.text); //////////////////////
                 _textController.text = '';
               }

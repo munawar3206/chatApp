@@ -1,6 +1,6 @@
 
 import 'package:chattogether/apis/api.dart';
-import 'package:chattogether/main.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/chatscreen/widgets/chatscreenappbar/appbar.dart';
@@ -22,7 +22,6 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> _list = [];
 
   // for handling msg text changes
-  // final TextEditingController _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,24 +41,18 @@ class _ChatScreenState extends State<ChatScreen> {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
                       case ConnectionState.waiting:
-                        return SizedBox();
+                        return const SizedBox();
 
                       case ConnectionState.active:
                       case ConnectionState.done:
-                        // final data = snapshot.data?.docs;
-                        // print('Data:${jsonEncode(data![0].data())}');
-                        // if (snapshot.hasData) {
+                    
                         final data = snapshot.data?.docs;
 
                         _list = data
                                 ?.map((e) => MessageModel.fromJson(e.data()))
                                 .toList() ??
                             [];
-                        // for (var i in data!) {
-                        //   print('Data : ${jsonEncode(i.data())}');
-                        //   list.add(i.data()['name']);
-                        // }
-                        // }
+                   
 
                         if (_list.isNotEmpty) {
                           return ListView.builder(

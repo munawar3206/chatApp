@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
-import 'package:chattogether/main.dart';
 import 'package:chattogether/view/homeScreen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/cupertino.dart';

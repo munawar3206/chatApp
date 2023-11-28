@@ -1,6 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chattogether/main.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/view/chatscreen/chat_screen.dart';
 import 'package:chattogether/view/homeScreen/home.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +10,7 @@ class custom_appbar extends StatelessWidget {
   const custom_appbar({
     super.key,
     required this.widget,
-    // required this.widget,
+   
   });
 
   final ChatScreen widget;
@@ -23,11 +23,11 @@ class custom_appbar extends StatelessWidget {
         IconButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepage()));
+            context, MaterialPageRoute(builder: (context) =>const Homepage()));
       },
-      icon: Icon(
+      icon:const Icon(
         Icons.arrow_back,
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color:  Color.fromARGB(255, 255, 255, 255),
       )),
         ClipRRect(
     borderRadius: BorderRadius.circular(mq.height * .03),
@@ -41,7 +41,7 @@ class custom_appbar extends StatelessWidget {
       ),
     ),
         ),
-        SizedBox(
+       const SizedBox(
     width: 10,
         ),
         Column(
@@ -55,7 +55,7 @@ class custom_appbar extends StatelessWidget {
             color: Colors.white,
             fontSize: 16),
       ),
-      SizedBox(
+     const SizedBox(
         height: 5,
       ),
       const Text(

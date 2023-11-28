@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
-import 'package:chattogether/main.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -82,9 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               File(_image!),
                               width: mq.height * .2,
                               height: mq.height * .2,
-                              // imageUrl: widget.user.image,
                               fit: BoxFit.fill,
-                              // placeholder: (context, url) => CircularProgressIndicator(),
+                             
                             ),
                           )
                         : ClipRRect(
@@ -94,7 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: mq.height * .2,
                               imageUrl: widget.user.image,
                               fit: BoxFit.fill,
-                              // placeholder: (context, url) => CircularProgressIndicator(),
                               errorWidget: (context, url, error) =>
                                   const CircleAvatar(
                                 child: Icon(CupertinoIcons.person),

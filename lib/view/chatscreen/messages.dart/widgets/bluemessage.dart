@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/date.dart';
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:chattogether/main.dart';
 import 'package:chattogether/view/chatscreen/messages.dart/messagecard.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +60,7 @@ class BlueMessage extends StatelessWidget {
                       height: 200,
                       width: 200,
                       imageUrl: widget.message.msg,
-                      placeholder: (context, url) => CircularProgressIndicator(
+                      placeholder: (context, url) =>const CircularProgressIndicator(
                         strokeWidth: 2,
                       ),
                       errorWidget: (context, url, error) => const CircleAvatar(

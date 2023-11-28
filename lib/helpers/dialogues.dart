@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 class Dialogs {
   static void showSnackbar(BuildContext context,String msg) {
@@ -16,3 +16,5 @@ class Dialogs {
     );
   }
 }
+
+late Size mq;

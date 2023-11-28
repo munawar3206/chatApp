@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class MyDateUtil {
@@ -23,6 +23,8 @@ class MyDateUtil {
         ? '$formattedTime - ${sent.day} ${_getMonth(sent)}'
         : '$formattedTime - ${sent.day} ${_getMonth(sent)} ${sent.year}';
   }
+
+
   // get last msg time
   static String getLastMessageTime(
       {required BuildContext context,
