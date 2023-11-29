@@ -20,11 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         print('\nUser: ${user.user}');
         print('\nUserAdditionalInfo: ${user.additionalUserInfo}');
-        if ((await Apis.userExists())) {
+        if ((await Services.userExists())) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (_) => Homepage()));
         } else {
-          Apis.createUser().then((value) {
+          Services.createUser().then((value) {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => Homepage()));
           });

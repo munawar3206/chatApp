@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-class MyDateUtil {
+class MyDateUtil  {
   static String getFrommattedTime(
       {required BuildContext context, required String time}) {
     final date = DateTime.fromMicrosecondsSinceEpoch(int.parse(time));

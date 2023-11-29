@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/controller/homeprovider.dart';
 import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/message_model.dart';
@@ -7,6 +8,7 @@ import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/chatscreen/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUser User;
@@ -27,17 +29,17 @@ class _ChatUserCardState extends State<ChatUserCard> {
       // color: Color.fromARGB(201, 83, 83, 83),
       elevation: 0.5,
       shape: const RoundedRectangleBorder(),
-      child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                          user: widget.User,
-                        )));
-          },
-          child: StreamBuilder(
-              stream: Apis.getLastMessage(widget.User),
+      child: InkWell(onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatScreen(
+                      user: widget.User,
+                    )));
+      }, child: Consumer<HomeProvider>(
+        builder: (BuildContext context, HomeProvider value, Widget? child) {
+          return StreamBuilder(
+              stream: value.getLastMessageProvider(widget.User),
               builder: (context, snapshot) {
                 final data = snapshot.data?.docs;
                 final list = data
@@ -45,7 +47,6 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         .toList() ??
                     [];
                 if (list.isNotEmpty) _messageModel = list[0];
-
 
                 return ListTile(
                   leading: ClipRRect(
@@ -71,7 +72,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                       // show nothing when no msg is sent
                       ? null
                       : _messageModel!.read.isEmpty &&
-                              _messageModel!.fromId != Apis.user.uid
+                              _messageModel!.fromId != Services.user.uid
                           // show unread msg
                           ? Container(
                               width: 15,
@@ -84,7 +85,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
                           : Text(MyDateUtil.getLastMessageTime(
                               context: context, time: _messageModel!.sent)),
                 );
-              })),
+              });
+        },
+      )),
     );
   }
 }

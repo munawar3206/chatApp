@@ -1,22 +1,29 @@
 import 'dart:io';
 
-import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/controller/message_provider.dart';
 
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class Customtextfield extends StatelessWidget {
+class Customtextfield extends StatefulWidget {
   ChatUser user;
   Customtextfield({super.key, required this.user});
 
+  @override
+  State<Customtextfield> createState() => _CustomtextfieldState();
+}
+
+class _CustomtextfieldState extends State<Customtextfield> {
 //  for handling msg text changes
-  final TextEditingController _textController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
+    final messageprovider = Provider.of<MessageProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -27,8 +34,6 @@ class Customtextfield extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15)),
               child: Row(
                 children: [
-                  // emoji
-
                   IconButton(
                       onPressed: () {},
                       icon: const Icon(
@@ -37,7 +42,7 @@ class Customtextfield extends StatelessWidget {
                       )),
                   Expanded(
                       child: TextField(
-                    controller: _textController,
+                    controller:messageprovider.textController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration(
@@ -55,7 +60,8 @@ class Customtextfield extends StatelessWidget {
                         // print(
                         //     "image path : ${image.path} --MimeType:${image.mimeType}");
 
-                        Apis.sentChatMessage(user, File(image.path));
+                          messageprovider.senderchatMessageProvider(
+                              widget.user, File(image.path));
                       }
                     },
                     icon: const Icon(
@@ -70,10 +76,10 @@ class Customtextfield extends StatelessWidget {
                         final XFile? image = await picker.pickImage(
                             source: ImageSource.gallery, imageQuality: 80);
                         if (image != null) {
-                          // print(
-                          //     "image path : ${image.path} --MimeType:${image.mimeType}");
-
-                          Apis.sentChatMessage(user, File(image.path));
+                       
+                          messageprovider.senderchatMessageProvider(
+                              widget.user, File(image.path));
+                          
                         }
                       },
                       icon: const Icon(
@@ -86,20 +92,21 @@ class Customtextfield extends StatelessWidget {
           ),
           MaterialButton(
             onPressed: () {
-              if (_textController.text.isNotEmpty) {
-                print("${_textController.text}");
-                Apis.sendMessage(user, _textController.text,
-                    Type.text); //////////////////////
-                _textController.text = '';
+              if (messageprovider.textController.text.isNotEmpty) {
+                // print(messageprovider.textController.text);
+                messageprovider.sendMessageProvider(
+                    widget.user, Type.text);
+
+                messageprovider.textController.text = '';
               }
             },
             minWidth: 0,
-            padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
-            shape: CircleBorder(),
+            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
+            shape: const CircleBorder(),
             color: Colors.green,
-            child: Icon(
+            child: const Icon(
               Icons.send,
-              color: const Color.fromARGB(255, 255, 255, 255),
+              color: Color.fromARGB(255, 255, 255, 255),
               size: 26,
             ),
           )

@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // progress dialog
               Dialogs.showProgressBar(context);
               // signout
-              await Apis.auth.signOut().then((value) async {
+              await Services.auth.signOut().then((value) async {
                 await GoogleSignIn().signOut().then((value) => {
                       // hidding progress bar
                       Navigator.pop(context),
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TextFormField(
                   initialValue: widget.user.name,
-                  onSaved: (val) => Apis.me.name = val ?? "",
+                  onSaved: (val) => Services.me.name = val ?? "",
                   validator: (val) =>
                       val != null && val.isNotEmpty ? null : "Required Field",
                   decoration: InputDecoration(
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 TextFormField(
                   initialValue: widget.user.about,
-                  onSaved: (val) => Apis.me.about = val ?? "",
+                  onSaved: (val) => Services.me.about = val ?? "",
                   validator: (val) =>
                       val != null && val.isNotEmpty ? null : "Required Field",
                   decoration: InputDecoration(
@@ -152,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      Apis.updateUserInfo()
+                      Services.updateUserInfo()
                           .then((value) => Dialogs.showSnackbar(context,'Updated'));
                       print("valid");
                     }
@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             setState(() {
                               _image = image.path;
                             });
-                            Apis.updateProfilePicture(File(_image!));
+                            Services.updateProfilePicture(File(_image!));
                           }
                           Navigator.pop(context);
                         },
@@ -246,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             setState(() {
                               _image = image.path;
                             });
-                            Apis.updateProfilePicture(File(_image!));
+                            Services.updateProfilePicture(File(_image!));
                           }
                           Navigator.pop(context);
                         },

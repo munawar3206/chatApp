@@ -1,8 +1,10 @@
+import 'package:chattogether/controller/message_provider.dart';
+import 'package:chattogether/controller/homeprovider.dart';
 import 'package:chattogether/firebase_options.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,10 +18,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Chat2gether',
-      home: LoginScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MessageProvider(),
+        )
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Chat2gether',
+        home: LoginScreen(),
+      ),
     );
   }
 }

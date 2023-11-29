@@ -1,4 +1,6 @@
 import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/controller/auth.dart';
+import 'package:chattogether/controller/homeprovider.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/model.dart';
 import 'package:chattogether/view/profile_screen.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -19,7 +22,8 @@ class _HomepageState extends State<Homepage> {
   List<ChatUser> list = [];
   @override
   void initState() {
-    Apis.getSelfInfo();
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.getSelfInfoProvider();
     super.initState();
   }
 
@@ -43,7 +47,7 @@ class _HomepageState extends State<Homepage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfileScreen(
-                        user:Apis.me,
+                        user: Services.me,
                       ),
                     ));
               },
@@ -60,41 +64,45 @@ class _HomepageState extends State<Homepage> {
           Icons.add_comment_rounded,
         ),
       ),
-      body: StreamBuilder(
-          stream: Apis.getAllUsers(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+      body: Consumer<HomeProvider>(
+        builder: (BuildContext context, HomeProvider value, Widget? child) {
+          return StreamBuilder(
+              stream: value.getAllUsersProvider(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                  case ConnectionState.waiting:
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
 
-              case ConnectionState.active:
-              case ConnectionState.done:
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    final data = snapshot.data?.docs;
+                    list = data
+                            ?.map((e) => ChatUser.fromJson(e.data()))
+                            .toList() ??
+                        [];
 
-                final data = snapshot.data?.docs;
-                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                    [];
-         
-                if (list.isNotEmpty) {
-                  return ListView.builder(
-                      itemCount: list.length,
-                      padding: EdgeInsets.only(top: mq.height * .01),
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return ChatUserCard(
-                          User: list[index],
-                        );
-                      
-                      });
-                } else {
-                  return const Center(
-                    child: Text("No Network"),
-                  );
+                    if (list.isNotEmpty) {
+                      return ListView.builder(
+                          itemCount: list.length,
+                          padding: EdgeInsets.only(top: mq.height * .01),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return ChatUserCard(
+                              User: list[index],
+                            );
+                          });
+                    } else {
+                      return const Center(
+                        child: Text("No Network"),
+                      );
+                    }
                 }
-            }
-          }),
+              });
+        },
+      ),
     );
   }
 }

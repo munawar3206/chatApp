@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:chattogether/model/message_model.dart';
@@ -7,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class Apis {
+class Services {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,8 +17,6 @@ class Apis {
 
   static User get user => auth.currentUser!;
 
-
-
 // user exists or not
   static Future<bool> userExists() async {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
@@ -29,7 +26,6 @@ class Apis {
     await firestore.collection('users').doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
-        // log("My Data :${user.data()}");
       } else {
         await createUser().then((value) => getSelfInfo());
       }
@@ -57,7 +53,7 @@ class Apis {
 
 // getting all users from firestore database
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
-    return Apis.firestore
+    return Services.firestore
         .collection('users')
         .where('id', isNotEqualTo: user.uid)
         .snapshots();
@@ -87,11 +83,6 @@ class Apis {
         .doc(user.uid)
         .update({'image': me.image});
   }
-
-
-
-
-  
 
   ///***************Chat Screen Related Apis/Functions*******************************
   static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
@@ -159,18 +150,17 @@ class Apis {
     });
     // updating in firebase
     final imageUrl = await ref.getDownloadURL();
-    await Apis.sendMessage(chatUser, imageUrl, Type.image);
+    await Services.sendMessage(chatUser, imageUrl, Type.image);
   }
 
- 
-  static Future<void> deleteMessage(MessageModel message) async {
-    await firestore
-        .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
-        .delete();
+  // static Future<void> deleteMessage(MessageModel message) async {
+  //   await firestore
+  //       .collection('chats/${getConversationID(message.toId)}/messages/')
+  //       .doc(message.sent)
+  //       .delete();
 
-    if (message.type == Type.image) {
-      await storage.refFromURL(message.msg).delete();
-    }
-  }
+  //   if (message.type == Type.image) {
+  //     await storage.refFromURL(message.msg).delete();
+  //   }
+  // }
 }

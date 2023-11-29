@@ -17,7 +17,7 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    bool isMe = Apis.user.uid == widget.message.fromId;
+    bool isMe = Services.user.uid == widget.message.fromId;
     return InkWell(
         onLongPress: () {
           // _showbottomsheet(isMe);
