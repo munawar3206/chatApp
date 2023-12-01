@@ -18,7 +18,7 @@ class Services {
   static User get user => auth.currentUser!;
 
 
-
+ 
    
 // user exists or not
   static Future<bool> userExists() async {
@@ -166,4 +166,5 @@ class Services {
       await storage.refFromURL(message.msg).delete();
     }
   }
+  
 }

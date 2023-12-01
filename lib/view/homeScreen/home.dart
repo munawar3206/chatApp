@@ -36,13 +36,13 @@ class _HomepageState extends State<Homepage> {
         toolbarHeight: 100,
         centerTitle: true,
         elevation: 4,
-        backgroundColor:const Color.fromARGB(255, 3, 90, 90),
+        backgroundColor: Color.fromARGB(255, 4, 55, 78),
         leading: IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>const LoginScreen()));
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
             },
-            icon:const Icon(CupertinoIcons.home)),
+            icon: const Icon(CupertinoIcons.home)),
         actions: [
           // IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
           IconButton(

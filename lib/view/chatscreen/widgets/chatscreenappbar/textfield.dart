@@ -9,18 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class Customtextfield extends StatefulWidget {
+class Customtextfield extends StatelessWidget {
   ChatUser user;
   Customtextfield({super.key, required this.user});
 
-  @override
-  State<Customtextfield> createState() => _CustomtextfieldState();
-}
-
-class _CustomtextfieldState extends State<Customtextfield> {
 //  for handling msg text changes
-  
-
   @override
   Widget build(BuildContext context) {
     final messageprovider = Provider.of<MessageProvider>(context);
@@ -61,7 +54,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
                         //     "image path : ${image.path} --MimeType:${image.mimeType}");
 
                           messageprovider.senderchatMessageProvider(
-                              widget.user, File(image.path));
+                              user, File(image.path));
                       }
                     },
                     icon: const Icon(
@@ -78,7 +71,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
                         if (image != null) {
                        
                           messageprovider.senderchatMessageProvider(
-                              widget.user, File(image.path));
+                              user, File(image.path));
                           
                         }
                       },
@@ -95,7 +88,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
               if (messageprovider.textController.text.isNotEmpty) {
                 // print(messageprovider.textController.text);
                 messageprovider.sendMessageProvider(
-                    widget.user, Type.text);
+                    user, Type.text);
 
                 messageprovider.textController.text = '';
               }

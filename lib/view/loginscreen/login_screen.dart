@@ -1,10 +1,9 @@
-import 'dart:io';
+
 import 'package:chattogether/helpers/dialogues.dart';
+import 'package:chattogether/services/google_services.dart';
 import 'package:chattogether/services/services.dart';
 import 'package:chattogether/view/homeScreen/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,18 +14,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  _handleGoogleBtnClick() {
-    _signInWithGoogle().then((user) async {
+  handleGoogleBtnClick() {
+    GoogleSignServices().signInWithGoogle(context).then((user) async {
       if (user != null) {
         print('\nUser: ${user.user}');
         print('\nUserAdditionalInfo: ${user.additionalUserInfo}');
-        if ((await Services.userExists())) {
+        if (await Services.userExists()) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => Homepage()));
+            context,
+            MaterialPageRoute(builder: (_) => Homepage()),
+          );
         } else {
           Services.createUser().then((value) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => const Homepage()));
+              context,
+              MaterialPageRoute(builder: (_) => const Homepage()),
+            );
           });
         }
       }
@@ -45,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
         elevation: 1,
         toolbarHeight: 100,
-        backgroundColor: Color.fromARGB(255, 3, 90, 90),
+        backgroundColor: Color.fromARGB(255, 4, 55, 78),
       ),
       body: Stack(
         children: [
@@ -66,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: StadiumBorder(side: BorderSide(width: 3)),
                   elevation: 1),
               onPressed: () {
-                _handleGoogleBtnClick();
+                handleGoogleBtnClick();
               },
               icon: Image.asset(
                 "assets/google.png",
@@ -92,28 +95,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<UserCredential?> _signInWithGoogle() async {
-    // Trigger the authentication flow
-    try {
-      await InternetAddress.lookup('google.com');
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print('\n _signInWithGoogle: $e');
-      // return null;
-      Dialogs.showSnackbar(context, 'Welcome');
-    }
-  }
 }

@@ -3,9 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class HomeProvider extends ChangeNotifier {
-  // HomeProvider() {
-  //   getSelfInfoProvider();
-  // }
+  
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersProvider() {
     return Services.getAllUsers();
   }

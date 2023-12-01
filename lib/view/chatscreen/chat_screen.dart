@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class ChatScreen extends StatelessWidget {
   final ChatUser user;
   ChatScreen({super.key, required this.user});
@@ -23,6 +24,7 @@ class ChatScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
+          toolbarHeight: 75,
           automaticallyImplyLeading: false,
           flexibleSpace: Row(
             children: [
