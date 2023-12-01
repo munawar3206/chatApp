@@ -1,3 +1,4 @@
+import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/services/services.dart';
 
@@ -115,11 +116,11 @@ class _MessageCardState extends State<MessageCard> {
               //   endIndent: mq.width * .04,
               //   indent: mq.width * .04,
               // ),
-              // OptionItem(
-              //     icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
-              //     name:
-              //         'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
-              //     onTap: () {}),
+              OptionItem(
+                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                  name:
+                      'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
+                  onTap: () {}),
 
               // //read time
               // OptionItem(

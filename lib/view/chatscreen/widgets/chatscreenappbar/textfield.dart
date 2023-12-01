@@ -86,7 +86,6 @@ class Customtextfield extends StatelessWidget {
           MaterialButton(
             onPressed: () {
               if (messageprovider.textController.text.isNotEmpty) {
-                // print(messageprovider.textController.text);
                 messageprovider.sendMessageProvider(
                     user, Type.text);
 

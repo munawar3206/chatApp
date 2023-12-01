@@ -10,15 +10,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ChatUserCard extends StatefulWidget {
+class ChatUserCard extends StatelessWidget {
   final ChatUser User;
-  const ChatUserCard({super.key, required this.User});
+   ChatUserCard({super.key, required this.User});
 
-  @override
-  State<ChatUserCard> createState() => _ChatUserCardState();
-}
-
-class _ChatUserCardState extends State<ChatUserCard> {
   // last msg info (if null ---no msg)
   MessageModel? _messageModel;
 
@@ -34,12 +29,12 @@ class _ChatUserCardState extends State<ChatUserCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => ChatScreen(
-                      user: widget.User,
+                      user: User,
                     )));
       }, child: Consumer<HomeProvider>(
         builder: (BuildContext context, HomeProvider value, Widget? child) {
           return StreamBuilder(
-              stream: value.getLastMessageProvider(widget.User),
+              stream: value.getLastMessageProvider(User),
               builder: (context, snapshot) {
                 final data = snapshot.data?.docs;
                 final list = data
@@ -54,19 +49,19 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     child: CachedNetworkImage(
                       width: mq.height * .055,
                       height: mq.height * .055,
-                      imageUrl: widget.User.image,
+                      imageUrl: User.image,
                       errorWidget: (context, url, error) => const CircleAvatar(
                         child: Icon(CupertinoIcons.person),
                       ),
                     ),
                   ),
-                  title: Text(widget.User.name),
+                  title: Text(User.name),
                   subtitle: Text(
                       _messageModel != null
                           ? _messageModel!.type == Type.image
                               ? 'Image'
                               : _messageModel!.msg
-                          : widget.User.about,
+                          : User.about,
                       maxLines: 1),
                   trailing: _messageModel == null
                       // show nothing when no msg is sent

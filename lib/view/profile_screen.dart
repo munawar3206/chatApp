@@ -6,7 +6,6 @@ import 'package:chattogether/model/model.dart';
 import 'package:chattogether/services/services.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:chattogether/view/profile/widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -33,39 +32,33 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: Color.fromARGB(255, 4, 55, 78),
           toolbarHeight: 75,
         ),
-        floatingActionButton: Consumer<AuthProvider>(
-           builder: (context, value, child) {
-             return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: FloatingActionButton.extended(
-              label: const Text("Logout"),
-              backgroundColor: const Color.fromARGB(255, 245, 9, 9),
-              onPressed: () async {
-                // progress dialog
-                Dialogs.showProgressBar(context);
-               // void 
-                
-                
-                 Services.auth.signOut().then((value) async {
-                  await GoogleSignIn().signOut().then((value) => {
-                        // hidding progress bar
-                        Navigator.pop(context),
-                        Navigator.pop(context),
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
-                            ))
-                      });
-                });
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
-              ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: FloatingActionButton.extended(
+            label: const Text("Logout"),
+            backgroundColor: const Color.fromARGB(255, 245, 9, 9),
+            onPressed: () async {
+              // progress dialog
+              Dialogs.showProgressBar(context);
+              // void
+
+              Services.auth.signOut().then((value) async {
+                await GoogleSignIn().signOut().then((value) => {
+                      // hidding progress bar
+                      Navigator.pop(context),
+                      Navigator.pop(context),
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ))
+                    });
+              });
+            },
+            icon: const Icon(
+              Icons.logout_outlined,
             ),
-          );
-           },
-           
+          ),
         ),
         body: Form(
           key: _formKey,
@@ -175,5 +168,4 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-
 }

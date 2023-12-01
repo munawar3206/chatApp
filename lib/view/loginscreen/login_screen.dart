@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (await Services.userExists()) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => Homepage()),
+            MaterialPageRoute(builder: (_) => const Homepage()),
           );
         } else {
           Services.createUser().then((value) {
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
         elevation: 1,
         toolbarHeight: 100,
-        backgroundColor: Color.fromARGB(255, 4, 55, 78),
+        backgroundColor: const Color.fromARGB(255, 4, 55, 78),
       ),
       body: Stack(
         children: [
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlueAccent.shade100,
-                  shape: StadiumBorder(side: BorderSide(width: 3)),
+                  shape: const StadiumBorder(side: BorderSide(width: 3)),
                   elevation: 1),
               onPressed: () {
                 handleGoogleBtnClick();
