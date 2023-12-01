@@ -1,10 +1,15 @@
+
+
+
+
 import 'dart:io';
 
+import 'package:chattogether/helpers/dialogues.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class GoogleServices {
-  Future<UserCredential?> signInWithGoogle() async {
+class GoogleSignServices {
+  Future<UserCredential?> signInWithGoogle(context) async {
     // Trigger the authentication flow
     try {
       await InternetAddress.lookup('google.com');
@@ -25,7 +30,7 @@ class GoogleServices {
     } catch (e) {
       print('\n _signInWithGoogle: $e');
       // return null;
-      // Dialogs.showSnackbar(context, 'Welcome');
+      Dialogs.showSnackbar(context, 'Welcome');
     }
   }
 }

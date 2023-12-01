@@ -1,5 +1,7 @@
+import 'package:chattogether/controller/auth.dart';
 import 'package:chattogether/controller/message_provider.dart';
 import 'package:chattogether/controller/homeprovider.dart';
+import 'package:chattogether/controller/profilrprovider.dart';
 import 'package:chattogether/firebase_options.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +27,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => MessageProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileProvider(),
+        ),
+          ChangeNotifierProvider(
+          create: (context) => AuthProviders1(),
         )
       ],
       child: const MaterialApp(

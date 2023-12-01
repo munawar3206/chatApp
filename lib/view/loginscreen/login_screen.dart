@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/helpers/dialogues.dart';
+import 'package:chattogether/services/services.dart';
 import 'package:chattogether/view/homeScreen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,36 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           Services.createUser().then((value) {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => Homepage()));
+                context, MaterialPageRoute(builder: (_) => const Homepage()));
           });
         }
       }
     });
-  }
-
-  Future<UserCredential?> _signInWithGoogle() async {
-    // Trigger the authentication flow
-    try {
-      await InternetAddress.lookup('google.com');
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print('\n _signInWithGoogle: $e');
-      // return null;
-      Dialogs.showSnackbar(context, 'Welcome');
-    }
   }
 
   @override
@@ -64,23 +39,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Welcome to Chat",
+          "User Login",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.black,
+        toolbarHeight: 100,
+        backgroundColor: Color.fromARGB(255, 3, 90, 90),
       ),
       body: Stack(
         children: [
           Positioned(
-            top: mq.height * .15,
-            width: mq.width * .5,
-            left: mq.width * .25,
-            child: Image.asset(
-              "assets/communication.png",
-            ),
-          ),
+              top: mq.height * .15,
+              width: mq.width * .5,
+              left: mq.width * .25,
+              child: Lottie.asset("assets/Animation - 1701407219008 (1).json",
+                  height: 300)),
           Positioned(
             bottom: mq.height * .15,
             width: mq.width * .9,
@@ -89,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlueAccent.shade100,
-                  shape: const StadiumBorder(),
+                  shape: StadiumBorder(side: BorderSide(width: 3)),
                   elevation: 1),
               onPressed: () {
                 _handleGoogleBtnClick();
@@ -116,5 +90,30 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    // Trigger the authentication flow
+    try {
+      await InternetAddress.lookup('google.com');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print('\n _signInWithGoogle: $e');
+      // return null;
+      Dialogs.showSnackbar(context, 'Welcome');
+    }
   }
 }

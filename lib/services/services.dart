@@ -17,6 +17,9 @@ class Services {
 
   static User get user => auth.currentUser!;
 
+
+
+   
 // user exists or not
   static Future<bool> userExists() async {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
@@ -153,14 +156,14 @@ class Services {
     await Services.sendMessage(chatUser, imageUrl, Type.image);
   }
 
-  // static Future<void> deleteMessage(MessageModel message) async {
-  //   await firestore
-  //       .collection('chats/${getConversationID(message.toId)}/messages/')
-  //       .doc(message.sent)
-  //       .delete();
+  static Future<void> deleteMessage(MessageModel message) async {
+    await firestore
+        .collection('chats/${getConversationID(message.toId)}/messages/')
+        .doc(message.sent)
+        .delete();
 
-  //   if (message.type == Type.image) {
-  //     await storage.refFromURL(message.msg).delete();
-  //   }
-  // }
+    if (message.type == Type.image) {
+      await storage.refFromURL(message.msg).delete();
+    }
+  }
 }

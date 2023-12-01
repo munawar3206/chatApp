@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chattogether/apis/api.dart';
 import 'package:chattogether/controller/homeprovider.dart';
 import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:chattogether/services/services.dart';
 import 'package:chattogether/view/chatscreen/chat_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                       width: mq.height * .055,
                       height: mq.height * .055,
                       imageUrl: widget.User.image,
-                      errorWidget: (context, url, error) => CircleAvatar(
+                      errorWidget: (context, url, error) => const CircleAvatar(
                         child: Icon(CupertinoIcons.person),
                       ),
                     ),
@@ -79,7 +79,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                               height: 15,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
-                                color: Color.fromARGB(255, 3, 157, 8),
+                                color:const Color.fromARGB(255, 3, 157, 8),
                               ),
                             )
                           : Text(MyDateUtil.getLastMessageTime(

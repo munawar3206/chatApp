@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/services/services.dart';
 import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/model/message_model.dart';
 import 'package:chattogether/model/model.dart';
@@ -26,7 +26,7 @@ class MessageProvider extends ChangeNotifier {
 
   Future UpdateMsgStatusProvider(MessageModel message) async {
     await Services.updateMessageReadStatus(message);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future getFormmatedDateProvider(BuildContext context, String time) async {

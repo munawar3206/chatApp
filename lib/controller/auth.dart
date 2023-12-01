@@ -5,7 +5,12 @@
 // import 'package:flutter/material.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 
-// class AuthProviders extends ChangeNotifier {
+import 'package:chattogether/services/google_services.dart';
+import 'package:flutter/cupertino.dart';
+
+class AuthProviders1 extends ChangeNotifier {
+
+  
 //   // AuthProviders() {
 //   //   googleSignIn();
 //   // }
@@ -26,10 +31,12 @@
 //   //   notifyListeners();
 //   // }
 
-//   // Future googleSignIn() async {
-//   //   await GoogleServices().signInWithGoogle();
-//   //   notifyListeners();
-//   // }
+  Future googleSignInFunction(context) async {
+    await GoogleSignServices().signInWithGoogle(context);
+    notifyListeners();
+  }
 
 //   // void then(Future<Null> Function(dynamic user) param0) {}
-// }
+}
+
+

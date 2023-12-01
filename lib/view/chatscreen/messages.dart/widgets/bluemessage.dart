@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/services/services.dart';
 import 'package:chattogether/controller/message_provider.dart';
 import 'package:chattogether/helpers/date.dart';
 import 'package:chattogether/helpers/dialogues.dart';
@@ -19,15 +19,13 @@ class BlueMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final messageprovider = Provider.of<MessageProvider>(context);
    
     return Consumer<MessageProvider>(
 
-      builder: (BuildContext context, messageprovider, Widget? child) { 
+      builder: (BuildContext context, messageprovider, Widget? child,) { 
  if (widget.message.read.isEmpty) {
       messageprovider.UpdateMsgStatusProvider(widget.message);
-      // Services.updateMessageReadStatus(widget.message);
-      print("Message Updated");
+      // print("Message Updated");
     }
     return  Row(
         mainAxisAlignment: MainAxisAlignment.end,

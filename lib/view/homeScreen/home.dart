@@ -1,14 +1,12 @@
-import 'package:chattogether/apis/api.dart';
-import 'package:chattogether/controller/auth.dart';
 import 'package:chattogether/controller/homeprovider.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:chattogether/services/services.dart';
+import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:chattogether/view/profile_screen.dart';
 import 'package:chattogether/view/homeScreen/chat_user_widget.dart/chat_user_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
@@ -32,15 +30,21 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Chat2gether",
+          "Send-Chat 🗨️",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        toolbarHeight: 100,
         centerTitle: true,
         elevation: 4,
-        backgroundColor: Colors.black,
-        leading: const Icon(CupertinoIcons.home),
+        backgroundColor:const Color.fromARGB(255, 3, 90, 90),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>const LoginScreen()));
+            },
+            icon:const Icon(CupertinoIcons.home)),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
+          // IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
           IconButton(
               onPressed: () {
                 Navigator.push(
@@ -53,16 +57,6 @@ class _HomepageState extends State<Homepage> {
               },
               icon: const Icon(Icons.more_vert))
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () async {
-          await FirebaseAuth.instance.signOut();
-          await GoogleSignIn().signOut();
-        },
-        child: const Icon(
-          Icons.add_comment_rounded,
-        ),
       ),
       body: Consumer<HomeProvider>(
         builder: (BuildContext context, HomeProvider value, Widget? child) {

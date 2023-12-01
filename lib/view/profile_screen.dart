@@ -1,39 +1,36 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chattogether/apis/api.dart';
+import 'package:chattogether/controller/profilrprovider.dart';
 import 'package:chattogether/helpers/dialogues.dart';
 import 'package:chattogether/model/model.dart';
+import 'package:chattogether/services/services.dart';
 import 'package:chattogether/view/loginscreen/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   final ChatUser user;
-  const ProfileScreen({super.key, required this.user});
+  ProfileScreen({super.key, required this.user});
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? _image;
 
   @override
   Widget build(BuildContext context) {
+    final profileprovider = Provider.of<ProfileProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Profile Screen",
+            "Profile",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          centerTitle: true,
           elevation: 4,
-          backgroundColor: Colors.black,
+          backgroundColor: const Color.fromARGB(255, 3, 90, 90),
+          toolbarHeight: 75,
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10),
@@ -74,15 +71,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Stack(
                   children: [
-                    _image != null
+                    profileprovider.image != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(mq.height * .1),
                             child: Image.file(
-                              File(_image!),
+                              File(profileprovider.image!),
                               width: mq.height * .2,
                               height: mq.height * .2,
                               fit: BoxFit.fill,
-                             
                             ),
                           )
                         : ClipRRect(
@@ -90,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: CachedNetworkImage(
                               width: mq.height * .2,
                               height: mq.height * .2,
-                              imageUrl: widget.user.image,
+                              imageUrl: user.image,
                               fit: BoxFit.fill,
                               errorWidget: (context, url, error) =>
                                   const CircleAvatar(
@@ -104,11 +100,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: MaterialButton(
                         shape: const CircleBorder(),
                         onPressed: () {
-                          _showbottomsheet();
+                          _showbottomsheet(context);
                         },
                         color: Colors.white,
                         elevation: 1,
-                        child: const Icon(Icons.edit),
+                        child: const Icon(
+                          Icons.edit,
+                          color: const Color.fromARGB(255, 3, 90, 90),
+                        ),
                       ),
                     )
                   ],
@@ -116,12 +115,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: mq.height * .03,
                 ),
-                Text(widget.user.email),
+                Text(user.email),
                 SizedBox(
                   height: mq.height * .03,
                 ),
                 TextFormField(
-                  initialValue: widget.user.name,
+                  initialValue: user.name,
                   onSaved: (val) => Services.me.name = val ?? "",
                   validator: (val) =>
                       val != null && val.isNotEmpty ? null : "Required Field",
@@ -137,14 +136,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: mq.height * .03,
                 ),
                 TextFormField(
-                  initialValue: widget.user.about,
+                  initialValue: user.about,
                   onSaved: (val) => Services.me.about = val ?? "",
                   validator: (val) =>
                       val != null && val.isNotEmpty ? null : "Required Field",
                   decoration: InputDecoration(
                       hintText: "eg. ntha barthanam",
                       label: const Text("About"),
-                      prefixIcon: const Icon(Icons.info_outline),
+                      prefixIcon: const Icon(Icons.info_outline,
+                          color: const Color.fromARGB(255, 3, 90, 90)),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20))),
                 ),
@@ -152,8 +152,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      Services.updateUserInfo()
-                          .then((value) => Dialogs.showSnackbar(context,'Updated'));
+                      profileprovider.updateUserInfoProvider().then(
+                          (value) => Dialogs.showSnackbar(context, 'Updated'));
                       print("valid");
                     }
                   },
@@ -168,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _showbottomsheet() {
+  void _showbottomsheet(context) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -195,7 +195,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         style: ElevatedButton.styleFrom(
                             shape: const CircleBorder(),
                             elevation: 20,
-                            backgroundColor: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 3, 90, 90),
                             fixedSize: Size(mq.width * .3, mq.height * .14)),
                         onPressed: () async {
                           final ImagePicker picker = ImagePicker();
@@ -205,10 +206,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (image != null) {
                             print(
                                 "image path : ${image.path} --MimeType:${image.mimeType}");
-                            setState(() {
-                              _image = image.path;
-                            });
-                            Services.updateProfilePicture(File(_image!));
+                            // setState(() {
+                            //   _image = image.path;
+                            // });
+                            final profileProvider =
+                                Provider.of<ProfileProvider>(context,
+                                    listen: false);
+                            profileProvider.imageValueChange(image.path);
+
+                            Services.updateProfilePicture(
+                                File(profileProvider.image!));
                           }
                           Navigator.pop(context);
                         },
@@ -233,7 +240,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         style: ElevatedButton.styleFrom(
                             shape: const CircleBorder(),
                             elevation: 20,
-                            backgroundColor: Colors.white,
+                            backgroundColor:
+                                const Color.fromARGB(255, 3, 90, 90),
                             fixedSize: Size(mq.width * .3, mq.height * .14)),
                         onPressed: () async {
                           final ImagePicker picker = ImagePicker();
@@ -243,10 +251,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (image != null) {
                             print(
                                 "image path : ${image.path} --MimeType:${image.mimeType}");
-                            setState(() {
-                              _image = image.path;
-                            });
-                            Services.updateProfilePicture(File(_image!));
+                            final profileProvider =
+                                Provider.of<ProfileProvider>(context);
+                            profileProvider.imageValueChange(image.path);
+                            Services.updateProfilePicture(
+                                File(profileProvider.image!));
                           }
                           Navigator.pop(context);
                         },
