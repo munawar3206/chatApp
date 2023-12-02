@@ -1,40 +1,11 @@
-
 import 'package:chattogether/helpers/dialogues.dart';
-import 'package:chattogether/services/google_services.dart';
-import 'package:chattogether/services/services.dart';
-import 'package:chattogether/view/homeScreen/home.dart';
+
+import 'package:chattogether/view/loginscreen/demo.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  handleGoogleBtnClick() {
-    GoogleSignServices().signInWithGoogle(context).then((user) async {
-      if (user != null) {
-        print('\nUser: ${user.user}');
-        print('\nUserAdditionalInfo: ${user.additionalUserInfo}');
-        if (await Services.userExists()) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const Homepage()),
-          );
-        } else {
-          Services.createUser().then((value) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const Homepage()),
-            );
-          });
-        }
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: const StadiumBorder(side: BorderSide(width: 3)),
                   elevation: 1),
               onPressed: () {
-                handleGoogleBtnClick();
+                handleGoogleBtnClick(context);
               },
               icon: Image.asset(
                 "assets/google.png",
@@ -94,6 +65,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-
 }

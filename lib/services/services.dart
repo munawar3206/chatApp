@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class Services {
+class Services { 
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -156,15 +156,15 @@ class Services {
     await Services.sendMessage(chatUser, imageUrl, Type.image);
   }
 
-  static Future<void> deleteMessage(MessageModel message) async {
-    await firestore
-        .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
-        .delete();
+  // static Future<void> deleteMessage(MessageModel message) async {
+  //   await firestore
+  //       .collection('chats/${getConversationID(message.toId)}/messages/')
+  //       .doc(message.sent)
+  //       .delete();
 
-    if (message.type == Type.image) {
-      await storage.refFromURL(message.msg).delete();
-    }
-  }
+  //   if (message.type == Type.image) {
+  //     await storage.refFromURL(message.msg).delete();
+  //   }
+  // }
   
 }
