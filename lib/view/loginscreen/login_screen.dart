@@ -1,6 +1,6 @@
 import 'package:chattogether/helpers/dialogues.dart';
 
-import 'package:chattogether/view/loginscreen/demo.dart';
+import 'package:chattogether/view/loginscreen/sign_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

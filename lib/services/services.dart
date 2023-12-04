@@ -156,15 +156,6 @@ class Services {
     await Services.sendMessage(chatUser, imageUrl, Type.image);
   }
 
-  // static Future<void> deleteMessage(MessageModel message) async {
-  //   await firestore
-  //       .collection('chats/${getConversationID(message.toId)}/messages/')
-  //       .doc(message.sent)
-  //       .delete();
 
-  //   if (message.type == Type.image) {
-  //     await storage.refFromURL(message.msg).delete();
-  //   }
-  // }
   
 }
